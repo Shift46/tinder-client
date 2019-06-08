@@ -13,7 +13,7 @@
   "module": "build/index.esm.js",
   "global": false,
   "scripts": {
-    "build": "BABEL_ENV=production rollup -c",
+    "build": "cross-env BABEL_ENV=production rollup -c",
     "codecov": "codecov",
     "deploy": "npm run travis-deploy-once 'npm run semantic-release'",
     "gc": "commit",
