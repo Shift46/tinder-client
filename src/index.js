@@ -49,7 +49,26 @@ async function requestSMS (phone) {
   return result.status === 200 ? result.data : null;
 }
 
-async function validateCode({confirmation_code, login_request_code, phone}) {
+async function refreshToken (refresh_token, apiToken) {
+  const options = {
+    method: 'POST',
+    headers: {
+      ...SHARED_HEADERS,
+      'X-Auth-Token': apiToken,
+    },
+    data: {
+      grant_type: 'refresh_token',
+      refresh_token,
+    },
+    url: `https://api.gotinder.com/v2/auth`,
+  };
+
+  let result = await axios(options);
+
+  return result.data && result.data.data && result.data.data ? result.data.data : null;
+}
+
+async function validateCode({ confirmation_code, login_request_code, phone }) {
   let options = {
     method: 'POST',
     headers: SHARED_HEADERS,
@@ -68,7 +87,7 @@ async function validateCode({confirmation_code, login_request_code, phone}) {
 
   result = await axios(options);
 
-  return result.data && result.data.data && result.data.data.api_token ? result.data.data.api_token : null;
+  return result.data && result.data.data && result.data.data ? result.data.data : null;
 }
 
 async function createClientFromFacebookAccessToken(facebookAccessToken) {
@@ -102,6 +121,7 @@ export {
   requestSMS,
   validateCode,
   createClientFromAccessToken,
+  refreshToken,
   GENDERS,
   GENDER_SEARCH_OPTIONS,
 };
